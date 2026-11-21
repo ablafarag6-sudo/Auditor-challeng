@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تحدي المراجع الخارجي</title>
+<style>
+body {
+  font-family: Arial;
+  background: #eef2f7;
+  text-align: center;
+  padding: 20px;
+}
+.box {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  max-width: 500px;
+  margin: 30px auto;
+}
+h1 { color: #173c68; }
+button {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin: 12px 0;
+  border: none;
+  border-radius: 9px;
+  background: #1769aa;
+  color: white;
+  font-size: 17px;
+}
+button:active { background: #10436c; }
+#result { font-weight: bold; margin: 15px; }
+</style>
+</head>
+<body>
+<div class="box">
+<h1>🎓 تحدي المراجع الخارجي</h1>
+<h3>اختبر معلوماتك في معيار ISA 320</h3>
+<p id="number">السؤال 1 من 5</p>
+<h3 id="question"></h3>
+<div id="answers"></div>
+<p id="result"></p>
+<button id="next" onclick="nextQuestion()" style="display:none">السؤال التالي</button>
+</div>
+
+<script>
+const questions = [
+{
+q:"ماذا يقصد بالأهمية النسبية في المراجعة؟",
+a:["حجم الشركة فقط","التحريف الذي قد يؤثر على قرارات مستخدمي القوائم المالية","عدد موظفي الشركة"],
+c:1
+},
+{
+q:"من المسؤول عن تحديد الأهمية النسبية للمراجعة؟",
+a:["مراقب الحسابات","موظف الحسابات","الموردون"],
+c:0
+},
+{
+q:"متى يحدد المراجع الأهمية النسبية؟",
+a:["بعد انتهاء المراجعة فقط","عند التخطيط للمراجعة","بعد إصدار التقرير"],
+c:1
+},
+{
+q:"هل يمكن تعديل الأهمية النسبية أثناء المراجعة؟",
+a:["نعم عند ظهور معلومات جديدة","لا مطلقاً","فقط بموافقة العميل"],
+c:0
+},
+{
+q:"ما العلاقة بين الأهمية النسبية ومخاطر المراجعة؟",
+a:["لا توجد علاقة","كلما انخفض مستوى الأهمية النسبية زادت إجراءات المراجعة المطلوبة غالباً","كلما زادت الأهمية النسبية زادت المخاطر دائماً"],
+c:1
+}
+];
+
+let current = 0;
+let score = 0;
+
+function showQuestion() {
+ document.getElementById("number").innerText =
+ "السؤال " + (current+1) + " من 5";
+ document.getElementById("question").innerText =
+ questions[current].q;
+ document.getElementById("result").innerText = "";
+ document.getElementById("next").style.display = "none";
+ let html = "";
+ questions[current].a.forEach((answer,i) => {
+ html += '<button onclick="checkAnswer('+i+')">'+answer+'</button>';
+ });
+ document.getElementById("answers").innerHTML = html;
+}
+
+function checkAnswer(i) {
+ let q = questions[current];
+ let buttons = document.querySelectorAll("#answers button");
+ buttons.forEach(b => b.disabled = true);
+ if(i === q.c) {
+ score++;
+ document.getElementById("result").innerText = "✅ إجابة صحيحة!";
+ } else {
+ document.getElementById("result").innerText =
+ "❌ إجابة غير صحيحة. الإجابة الصحيحة: " + q.a[q.c];
+ }
+ document.getElementById("next").style.display = "block";
+}
+
+function nextQuestion() {
+ current++;
+ if(current < questions.length) {
+ showQuestion();
+ } else {
+ document.querySelector(".box").innerHTML =
+ "<h1>انتهى التحدي 🎉</h1><h2>نتيجتك: "+score+" من 5</h2><button onclick='location.reload()'>إعادة اللعب</button>";
+ }
+}
+showQuestion();
+</script>
+</body>
+</html>
